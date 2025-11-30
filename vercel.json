@@ -1,16 +1,11 @@
 {
   "version": 2,
+  "buildCommand": "npm run vercel-build",
+  "outputDirectory": "client/build",
   "builds": [
     {
       "src": "server/server.js",
       "use": "@vercel/node"
-    },
-    {
-      "src": "client/package.json",
-      "use": "@vercel/static-build",
-      "config": {
-        "distDir": "build"
-      }
     }
   ],
   "routes": [
@@ -24,10 +19,13 @@
     },
     {
       "src": "/(.*)",
-      "dest": "client/build/$1"
+      "dest": "/client/build/$1"
     }
   ],
-  "env": {
-    "NODE_ENV": "production"
-  }
+  "rewrites": [
+    {
+      "source": "/api/(.*)",
+      "destination": "/server/server.js"
+    }
+  ]
 }
