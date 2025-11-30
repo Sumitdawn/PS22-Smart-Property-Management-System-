@@ -1,5 +1,96 @@
 import React, { useState, useEffect, useRef } from 'react';
 
+// Enhanced Chart with Filters Component
+export const EnhancedChartWithFilters = ({ 
+  data, 
+  title, 
+  chartType = 'bar', 
+  filters = [],
+  onFilterChange 
+}) => {
+  const [selectedFilter, setSelectedFilter] = useState(filters[0]?.value || 'all');
+  const [viewMode, setViewMode] = useState('chart');
+
+  const handleFilterChange = (value) => {
+    setSelectedFilter(value);
+    if (onFilterChange) onFilterChange(value);
+  };
+
+  return (
+    <div className="enhanced-chart-container">
+      <div className="chart-header-controls">
+        <h3 className="chart-title">{title}</h3>
+        <div className="chart-controls">
+          {filters.length > 0 && (
+            <select 
+              value={selectedFilter}
+              onChange={(e) => handleFilterChange(e.target.value)}
+              className="chart-filter-select"
+            >
+              {filters.map(filter => (
+                <option key={filter.value} value={filter.value}>
+                  {filter.label}
+                </option>
+              ))}
+            </select>
+          )}
+          <div className="view-mode-toggle">
+            <button 
+              className={`view-btn ${viewMode === 'chart' ? 'active' : ''}`}
+              onClick={() => setViewMode('chart')}
+              title="Chart View"
+            >
+              📊
+            </button>
+            <button 
+              className={`view-btn ${viewMode === 'table' ? 'active' : ''}`}
+              onClick={() => setViewMode('table')}
+              title="Table View"
+            >
+              📋
+            </button>
+          </div>
+        </div>
+      </div>
+      
+      {viewMode === 'chart' ? (
+        chartType === 'bar' ? (
+          <AnimatedBarChart data={data} height={300} />
+        ) : chartType === 'line' ? (
+          <AnimatedLineChart data={data} width={500} height={250} />
+        ) : (
+          <AnimatedDonutChart data={data} size={250} />
+        )
+      ) : (
+        <div className="chart-table-view">
+          <table className="data-table">
+            <thead>
+              <tr>
+                <th>Label</th>
+                <th>Value</th>
+                <th>Percentage</th>
+              </tr>
+            </thead>
+            <tbody>
+              {data.map((item, index) => {
+                const total = data.reduce((sum, d) => sum + d.value, 0);
+                const percentage = ((item.value / total) * 100).toFixed(1);
+                return (
+                  <tr key={index}>
+                    <td>{item.label}</td>
+                    <td>{item.value}</td>
+                    <td>{percentage}%</td>
+                  </tr>
+                );
+              })}
+            </tbody>
+          </table>
+        </div>
+      )}
+    </div>
+  );
+};
+
 // Animated Donut Chart Component
 export const AnimatedDonutChart = ({ data, title, size = 200 }) => {
   const [animatedData, setAnimatedData] = useState([]);

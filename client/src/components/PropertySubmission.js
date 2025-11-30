@@ -33,14 +33,19 @@ const PropertySubmission = ({ onSubmit }) => {
     setLoading(true);
 
     try {
-      await axios.post('/api/properties', {
+      const response = await axios.post('/api/properties', {
         ...formData,
         area: parseInt(formData.area),
         budget: parseInt(formData.budget),
         currentValue: parseInt(formData.currentValue)
       });
       
-      toast.success('Property submitted successfully!');
+      toast.success('✅ Property submitted successfully! Refreshing list...', {
+        duration: 3000,
+        icon: '🏠'
+      });
+      
+      // Reset form
       setFormData({
         type: '',
         location: '',
@@ -49,9 +54,20 @@ const PropertySubmission = ({ onSubmit }) => {
         currentValue: '',
         description: ''
       });
+      
+      // Trigger immediate refresh
       onSubmit();
+      
+      // Show success message with property details
+      setTimeout(() => {
+        toast.success(`Your ${formData.type} in ${formData.location} is now visible!`, {
+          duration: 4000
+        });
+      }, 1000);
+      
     } catch (error) {
-      toast.error('Failed to submit property');
+      toast.error('Failed to submit property. Please try again.');
+      console.error('Submission error:', error);
     } finally {
       setLoading(false);
     }

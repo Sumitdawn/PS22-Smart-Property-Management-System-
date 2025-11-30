@@ -6,18 +6,42 @@ const SearchAndFilter = ({ onSearch, onFilter, categories, propertyTypes }) => {
     category: '',
     propertyType: '',
     budgetRange: '',
-    difficulty: ''
+    difficulty: '',
+    timeframe: '',
+    roiRange: ''
   });
 
   const budgetRanges = [
-    { label: 'Under ₹50K', value: '0-50000' },
-    { label: '₹50K - ₹1L', value: '50000-100000' },
-    { label: '₹1L - ₹2L', value: '100000-200000' },
-    { label: '₹2L - ₹5L', value: '200000-500000' },
-    { label: 'Above ₹5L', value: '500000-999999999' }
+    { label: 'Under ₹25K', value: '0-25000' },
+    { label: '₹25K - ₹50K', value: '25000-50000' },
+    { label: '₹50K - ₹75K', value: '50000-75000' },
+    { label: '₹75K - ₹1L', value: '75000-100000' },
+    { label: '₹1L - ₹1.5L', value: '100000-150000' },
+    { label: '₹1.5L - ₹2L', value: '150000-200000' },
+    { label: '₹2L - ₹3L', value: '200000-300000' },
+    { label: '₹3L - ₹5L', value: '300000-500000' },
+    { label: '₹5L - ₹10L', value: '500000-1000000' },
+    { label: 'Above ₹10L', value: '1000000-999999999' }
   ];
 
-  const difficulties = ['Easy', 'Medium', 'Hard'];
+  const difficulties = ['Easy', 'Medium', 'Hard', 'Expert'];
+  
+  const timeframes = [
+    'Less than 1 week',
+    '1-2 weeks',
+    '2-4 weeks',
+    '1-2 months',
+    '2-3 months',
+    'More than 3 months'
+  ];
+
+  const roiRanges = [
+    { label: 'Below 50%', value: '0-50' },
+    { label: '50% - 100%', value: '50-100' },
+    { label: '100% - 150%', value: '100-150' },
+    { label: '150% - 200%', value: '150-200' },
+    { label: 'Above 200%', value: '200-999' }
+  ];
 
   const handleSearchChange = (e) => {
     const value = e.target.value;
@@ -36,7 +60,9 @@ const SearchAndFilter = ({ onSearch, onFilter, categories, propertyTypes }) => {
       category: '',
       propertyType: '',
       budgetRange: '',
-      difficulty: ''
+      difficulty: '',
+      timeframe: '',
+      roiRange: ''
     };
     setFilters(emptyFilters);
     setSearchTerm('');
@@ -120,6 +146,34 @@ const SearchAndFilter = ({ onSearch, onFilter, categories, propertyTypes }) => {
             <option value="">Any Difficulty</option>
             {difficulties.map(diff => (
               <option key={diff} value={diff}>{diff}</option>
+            ))}
+          </select>
+        </div>
+
+        <div className="filter-group">
+          <label>Timeframe</label>
+          <select
+            value={filters.timeframe}
+            onChange={(e) => handleFilterChange('timeframe', e.target.value)}
+            className="filter-select"
+          >
+            <option value="">Any Timeframe</option>
+            {timeframes.map(time => (
+              <option key={time} value={time}>{time}</option>
+            ))}
+          </select>
+        </div>
+
+        <div className="filter-group">
+          <label>Expected ROI</label>
+          <select
+            value={filters.roiRange}
+            onChange={(e) => handleFilterChange('roiRange', e.target.value)}
+            className="filter-select"
+          >
+            <option value="">Any ROI</option>
+            {roiRanges.map(range => (
+              <option key={range.value} value={range.value}>{range.label}</option>
             ))}
           </select>
         </div>

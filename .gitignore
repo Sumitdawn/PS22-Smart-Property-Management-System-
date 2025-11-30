@@ -95,3 +95,13 @@ temp/
 .Trashes
 ehthumbs.db
 Thumbs.db
+
+# Ver
+cel
+.vercel
+
+# Uploads
+server/uploads/
+
+# Local environment
+.env.local

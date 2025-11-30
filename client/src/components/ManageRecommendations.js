@@ -48,16 +48,33 @@ const ManageRecommendations = ({ recommendations, onRefresh }) => {
 
       if (editingRec) {
         await axios.put(`/api/recommendations/${editingRec.id}`, payload);
-        toast.success('Recommendation updated successfully!');
+        toast.success('✅ Recommendation updated! Changes are live now.', {
+          duration: 3000,
+          icon: '💡'
+        });
       } else {
         await axios.post('/api/recommendations', payload);
-        toast.success('Recommendation created successfully!');
+        toast.success('✅ New recommendation created! Visible to all users now.', {
+          duration: 3000,
+          icon: '🎉'
+        });
       }
 
       resetForm();
+      
+      // Immediate refresh
       onRefresh();
+      
+      // Show confirmation
+      setTimeout(() => {
+        toast.success(`"${formData.title}" is now live on the platform!`, {
+          duration: 4000
+        });
+      }, 1000);
+      
     } catch (error) {
-      toast.error('Failed to save recommendation');
+      toast.error('Failed to save recommendation. Please try again.');
+      console.error('Save error:', error);
     }
   };
 
@@ -77,13 +94,19 @@ const ManageRecommendations = ({ recommendations, onRefresh }) => {
   };
 
   const handleDelete = async (id) => {
-    if (window.confirm('Are you sure you want to delete this recommendation?')) {
+    if (window.confirm('Are you sure you want to delete this recommendation? This action cannot be undone.')) {
       try {
         await axios.delete(`/api/recommendations/${id}`);
-        toast.success('Recommendation deleted successfully!');
+        toast.success('✅ Recommendation deleted! Removed from all user views.', {
+          duration: 3000,
+          icon: '🗑️'
+        });
+        
+        // Immediate refresh
         onRefresh();
       } catch (error) {
-        toast.error('Failed to delete recommendation');
+        toast.error('Failed to delete recommendation. Please try again.');
+        console.error('Delete error:', error);
       }
     }
   };

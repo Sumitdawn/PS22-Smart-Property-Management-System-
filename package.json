@@ -1,14 +1,19 @@
 {
-  "name": "fullstack-web-app",
+  "name": "estateflow-platform",
   "version": "1.0.0",
-  "description": "Full-stack web application with React frontend and Node.js backend",
+  "description": "EstateFlow - Property Enhancement Platform",
   "scripts": {
-    "dev": "concurrently \"npm run server\" \"npm run client\"",
-    "server": "cd server && npm run dev",
-    "client": "cd client && npm start",
-    "install-all": "npm install && cd server && npm install && cd ../client && npm install"
+    "install-all": "npm install && cd client && npm install && cd ../server && npm install",
+    "build": "cd client && npm run build",
+    "start": "cd server && node server.js",
+    "dev": "concurrently \"cd server && npm run dev\" \"cd client && npm start\"",
+    "vercel-build": "cd client && npm install && npm run build"
   },
-  "devDependencies": {
-    "concurrently": "^8.2.2"
-  }
+  "keywords": [
+    "property",
+    "renovation",
+    "real-estate"
+  ],
+  "author": "EstateFlow Team",
+  "license": "MIT"
 }
